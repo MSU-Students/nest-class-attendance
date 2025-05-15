@@ -17,5 +17,5 @@ export class Comment {
     meeting: Meeting[];
 
     @ManyToOne(() => User, user => user.comments, { cascade: true })
-    user: User[];
+    user?: User[];
 }
