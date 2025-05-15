@@ -13,5 +13,6 @@ export class Role {
     status: 'active' | 'inactive' | 'disable';
 
     @ManyToOne(() => User, user => user.roles)
-    user: User;
+    //user: User;
+    user?: User;  // Add "?" to make it optional
 }

@@ -5,13 +5,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 
+
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private repo: Repository<User>,
   ) {}
-  
   
   create(createUserDto: CreateUserDto) {
     return this.repo.save(createUserDto);

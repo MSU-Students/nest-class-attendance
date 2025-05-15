@@ -16,20 +16,20 @@ export class User {
     password: string;
 
     @Column({ nullable: true })
-    fullName: string;
+    fullName?: string;
 
     @Column({ default: 'pending' })
-    status: string;
+    status?: string;
 
     @Column({nullable: true})
-    avatar: string;
+    avatar?: string;
 
     @OneToMany(() => Role, role => role.user, { cascade: true })
     roles: Role[];
 
     @OneToOne(() => Teacher, teacher => teacher.user)
-    teacher: Teacher[];
+    teacher?: Teacher[];
 
     @OneToMany(() => Comment, comment => comment.user)
-    comments: Comment[];
+    comments?: Comment[];
 }

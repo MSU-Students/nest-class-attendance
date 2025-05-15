@@ -9,15 +9,15 @@ import { Role } from 'src/enums/role.enum';
 export class SupervisorController {
   constructor(private readonly supervisorService: SupervisorService) {}
   
-  @ApiBearerAuth()
-  @Roles(Role.Admin, Role.Supervisor)
+  //@ApiBearerAuth()
+  //@Roles(Role.Admin, Role.Supervisor)
   @Get()
   findAll() {
     return this.supervisorService.findAll();
   }
 
-  @ApiBearerAuth()
-  @Roles(Role.Admin, Role.Supervisor)
+  //@ApiBearerAuth()
+  //@Roles(Role.Admin, Role.Supervisor)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.supervisorService.findOne(+id);
