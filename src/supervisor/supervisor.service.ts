@@ -47,4 +47,21 @@ export class SupervisorService {
       activeSessions: 3,
     };
   }
+
+  async getAttendanceSummary(from: string, to: string) {
+  // For now, return mock data similar to your existing style
+  return {
+    from,
+    to,
+    summary: [
+      { date: '2025-05-01', totalStudents: 100, present: 95, absent: 5 },
+      { date: '2025-05-02', totalStudents: 98, present: 94, absent: 4 },
+    ],
+    trends: {
+      sectionA: { present: 50, absent: 2 },
+      sectionB: { present: 45, absent: 3 },
+    },
+  };
+}
+
 }
