@@ -29,7 +29,6 @@ export class SupervisorService {
     return user;
   }
   
-
   remove(id: number) {
     return `This action removes a #${id} supervisor`;
   }

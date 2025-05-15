@@ -36,4 +36,5 @@ export class SupervisorController {
   getOverview() {
     return this.supervisorService.getOverview();
   }
+
 }

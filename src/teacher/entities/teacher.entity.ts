@@ -8,25 +8,25 @@ export class Teacher {
     id: number;
 
     @Column({ length: 50 })
-    Fname: string;
+    Fname?: string;
 
     @Column({ length: 255 })
     Lname: string;
 
     @Column({ length: 10 })
-    Age: string;
+    Age?: string;
 
     @Column({ length: 100 })
-    Address: string;
+    Address?: string;
 
     @Column({ length: 50 })
-    Phone: string;
+    Phone?: string;
 
     @OneToMany(() => Classes, classes => classes.teacher)
     classes: Classes[];
 
     @OneToOne(() => User, user => user.teacher, { cascade: true })
     @JoinColumn({ name: 'userId'})
-    user: User;
+    user?: User;
 }
 

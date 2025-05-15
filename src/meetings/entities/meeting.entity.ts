@@ -8,13 +8,13 @@ export class Meeting {
     id: number;
 
     @Column()
-    content: string;
+    content?: string;
     
     @Column()
     createdAt: Date;
 
     @OneToMany(() => Comment, comment => comment.meeting)
-    comments: Comment[];
+    comments?: Comment[];
 
     @ManyToOne(() => Classes, classes => classes.meetings, { cascade: true })
     classes: Classes[];
