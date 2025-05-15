@@ -2,6 +2,9 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 //import { InjectRepository } from '@nestjs/typeorm';
 //import { Repository } from 'typeorm';
 import { mockUsers } from '../mocks';
+import { mockComments } from 'src/comments/mock/mock-comments';
+import { mockMeetings } from 'src/meetings/mock/mock-meetings';
+import { mockClasses } from 'src/classes/mock/mock-classes';
 
 
 @Injectable()
@@ -48,20 +51,55 @@ export class SupervisorService {
     };
   }
 
-  async getAttendanceSummary(from: string, to: string) {
-  // For now, return mock data similar to your existing style
-  return {
-    from,
-    to,
-    summary: [
-      { date: '2025-05-01', totalStudents: 100, present: 95, absent: 5 },
-      { date: '2025-05-02', totalStudents: 98, present: 94, absent: 4 },
-    ],
-    trends: {
-      sectionA: { present: 50, absent: 2 },
-      sectionB: { present: 45, absent: 3 },
-    },
-  };
+ getAttendanceSummary(from?: string, to?: string) {
+  const startDate = from ? new Date(from) : new Date('2000-01-01');
+  const endDate = to ? new Date(to) : new Date('2100-01-01');
+
+  const filteredComments = mockComments.filter(comment => {
+    const date = comment.createdAt;
+    return date >= startDate && date <= endDate;
+  });
+
+  const summaryMap = new Map<string, {
+    date: string;
+    className: string;
+    classSection: string;
+    present: number;
+    absent: number;
+    total: number;
+  }>();
+
+  for (const comment of filteredComments) {
+    const dateStr = comment.createdAt.toISOString().split('T')[0];
+
+    const meeting = mockMeetings.find(m => m.id === comment.meeting.id);
+    if (!meeting) continue;
+
+    const classInfo = mockClasses.find(c => c.id === meeting.classes.id);
+    if (!classInfo) continue;
+
+    const key = `${dateStr}-${classInfo.id}`;
+
+    if (!summaryMap.has(key)) {
+      summaryMap.set(key, {
+        date: dateStr,
+        className: classInfo.className,
+        classSection: classInfo.classSection,
+        present: 0,
+        absent: 0,
+        total: 0,
+      });
+    }
+
+    const summary = summaryMap.get(key)!;
+
+    if (comment.content === 'present') summary.present++;
+    else if (comment.content === 'absent') summary.absent++;
+
+    summary.total++;
+  }
+
+  return Array.from(summaryMap.values());
 }
 
 }
