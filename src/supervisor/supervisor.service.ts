@@ -1,10 +1,10 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 //import { InjectRepository } from '@nestjs/typeorm';
 //import { Repository } from 'typeorm';
-import { mockUsers } from '../mocks';
-import { mockComments } from 'src/comments/mock/mock-comments';
-import { mockMeetings } from 'src/meetings/mock/mock-meetings';
-import { mockClasses } from 'src/classes/mock/mock-classes';
+import { mockUsers } from 'src/mocks/users.mock';
+import { mockComments } from 'src/mocks/attendances.mock';
+import { mockMeetings } from 'src/mocks/meetings.mock';
+import { mockClasses } from 'src/mocks/classes.mock';
 
 
 @Injectable()
@@ -72,10 +72,10 @@ export class SupervisorService {
   for (const comment of filteredComments) {
     const dateStr = comment.createdAt.toISOString().split('T')[0];
 
-    const meeting = mockMeetings.find(m => m.id === comment.meeting.id);
+    const meeting = mockMeetings.find(m => m.id === comment.meeting[0].id);
     if (!meeting) continue;
 
-    const classInfo = mockClasses.find(c => c.id === meeting.classes.id);
+    const classInfo = mockClasses.find(c => c.id === meeting.classes[0].id);
     if (!classInfo) continue;
 
     const key = `${dateStr}-${classInfo.id}`;
