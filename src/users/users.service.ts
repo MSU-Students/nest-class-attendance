@@ -5,32 +5,48 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Role } from './entities/role.entity';
 import { Repository } from 'typeorm';
+import { RolesService } from './roles.service';
+import { CreateRoleDto } from './dto/create-role.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepo: Repository<User>,
-    @InjectRepository(Role) private roleRepo: Repository<Role>,
+    private rolesService: RolesService,
   ) {}
-  
-  
-  create(createUserDto: CreateUserDto) {
-    return this.userRepo.save(createUserDto);
+
+  async create(createUserDto: CreateUserDto) {
+    const { role, roleStatus, ...userData } = createUserDto;
+
+    const user = await this.userRepo.save(userData);
+
+    const createRoleDto: CreateRoleDto = {
+      type: role,
+      userId: user.id,
+      status: roleStatus || 'active',
+    };
+    await this.rolesService.create(createRoleDto);
+
+    return this.findOne(user.id);
   }
 
   findAll() {
-    return this.userRepo.find();
-  }
-
-  findOne(id: number) {
-    return this.repo.findOneBy({
-      id
+    return this.userRepo.find({
+      relations: ['roles']
     });
   }
-  findOneByUsername(username:string) {
-    return this.repo.findOneBy({
-      username
+
+  async findOne(id: number) {
+    return this.userRepo.findOne({
+      where: { id },
+      relations: ['roles']
+    });
+  }
+  async findOneByUsername(username: string) {
+    return this.userRepo.findOne({
+      where: { username },
+      relations: ['roles']
     });
   }
   update(id: number, updateUserDto: UpdateUserDto) {
@@ -43,9 +59,9 @@ export class UsersService {
 
   async assignRole(userId: number, roleId: number) {
     const user = await this.userRepo.findOneBy({ id: userId });
-    const role = await this.roleRepo.findOneBy({ id: roleId });
-    if (user && role) {
-      user.role = role;
+    const roles = await this.rolesService.findByUserId(roleId);
+    if (user && roles?.length) {
+      user.roles = roles;
       return this.userRepo.save(user);
     }
     return null;

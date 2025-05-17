@@ -14,7 +14,7 @@ export class AttendanceRecord {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, user => user.attendanceRecords, { eager: true, onDelete: 'CASCADE' })
+  @ManyToOne(() => User, user => user.attendances, { eager: true, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user: User;
 
