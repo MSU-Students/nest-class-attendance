@@ -21,3 +21,14 @@ export class AttendanceController {
     return this.attendanceService.findByUser(userId);
   }
 }
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { AttendanceModule } from './attendance.module';
+
+
+providers: [
+  AttendanceService,
+  {
+    provide: getRepositoryToken(AttendanceModule),
+    useValue: {}, // mock repository object here
+  },
+]

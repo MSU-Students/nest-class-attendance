@@ -8,7 +8,7 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 @Entity()
 export class Attendance {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id: number;
 
   @Column({
     type: 'enum',

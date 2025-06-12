@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from './user.entity';
+import { AttendanceStatus } from 'src/enums/attendance-status.enum';
 
 @Entity('attendance_records')
 export class AttendanceRecord {
@@ -18,8 +19,11 @@ export class AttendanceRecord {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @Column()
-  status: 'present' | 'absent' | 'late';
+  @Column({
+    type: 'enum',
+    enum: AttendanceStatus,
+  })
+  status: AttendanceStatus;
 
   @Column({ type: 'datetime' })
   checkInTime: Date;

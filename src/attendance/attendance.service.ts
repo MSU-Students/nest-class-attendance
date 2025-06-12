@@ -35,7 +35,7 @@ export class AttendanceService {
 
   async getHistoryByStudentId(id: string): Promise<Attendance[]> {
     return this.attendanceRepository.find({
-      where: { id },
+      where: { id: Number(id) },
       order: { createdAt: 'DESC' }, // Sorts from latest to oldest
     });
   }
