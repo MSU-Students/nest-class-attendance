@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { AttendanceService } from './attendance.service';
 import { CreateAttendanceDto } from './dto/create-attendance.dto';
 import { UpdateAttendanceDto } from './dto/update-attendance.dto';
+import { Attendance } from './entities/attendance.entity';
 
 @Controller('attendance')
 export class AttendanceController {
@@ -18,17 +19,23 @@ export class AttendanceController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id',ParseIntPipe) id: number) {
     return this.attendanceService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAttendanceDto: UpdateAttendanceDto) {
+  update(@Param('id',ParseIntPipe) id: number, @Body() updateAttendanceDto: UpdateAttendanceDto) {
     return this.attendanceService.update(+id, updateAttendanceDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id',ParseIntPipe) id: number) {
     return this.attendanceService.remove(+id);
+  }
+  
+  // New GET route
+  @Get('history/:studentId')
+  getAttendanceHistory(@Param('studentId') studentId: string): Promise<Attendance[]> {
+    return this.attendanceService.getHistoryByStudentId(studentId);
   }
 }

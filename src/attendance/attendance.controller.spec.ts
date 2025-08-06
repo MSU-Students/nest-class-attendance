@@ -1,6 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AttendanceController } from './attendance.controller';
 import { AttendanceService } from './attendance.service';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { Attendance } from './entities/attendance.entity';
 
 describe('AttendanceController', () => {
   let controller: AttendanceController;
@@ -8,7 +10,13 @@ describe('AttendanceController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AttendanceController],
-      providers: [AttendanceService],
+      providers: [
+        AttendanceService, 
+        {
+          provide: getRepositoryToken(Attendance),
+          useValue: {},
+        }
+      ],
     }).compile();
 
     controller = module.get<AttendanceController>(AttendanceController);
@@ -17,4 +25,7 @@ describe('AttendanceController', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
+
+
 });
+

@@ -1,4 +1,8 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { isEnum, IsNotEmpty, IsString } from 'class-validator';
+import { IsEnum } from 'class-validator';
+import { AttendanceStatus } from 'src/enums/attendance-status.enum';
+import { AttendanceRecord} from 'src/users/entities/attendance_record.entity'; // adjust path
+
 
 export class CreateAttendanceDto {
   @IsNotEmpty()
@@ -6,7 +10,8 @@ export class CreateAttendanceDto {
 
   @IsNotEmpty()
   @IsString()
-  status: string; // 'present', 'absent', 'late', etc.
+  @IsEnum(AttendanceStatus)
+  status: AttendanceStatus;
 
   @IsNotEmpty()
   @IsString()
