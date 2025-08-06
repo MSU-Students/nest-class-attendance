@@ -1,6 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AttendanceController } from './attendance.controller';
 import { AttendanceService } from './attendance.service';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { Attendance } from './entities/attendance.entity';
 
 describe('AttendanceController', () => {
   let controller: AttendanceController;
